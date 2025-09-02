@@ -1,6 +1,6 @@
 # DysHelper
 
-DysHelper is a lightweight OCR (Optical Character Recognition) service built with Node.js and Tesseract.js.
+DysHelper is an all-in-one application that assists dyslexic users with day-to-day understanding and reading of the text around them, whether it be on their smart devices or in real life. Currently features a lightweight OCR (Optical Character Recognition) service built with Node.js and Tesseract.js.
 
 ## Features
 
