@@ -28,7 +28,9 @@ The server will run on `http://localhost:3000`
 Send a POST request to `/api/v1/ocr` with an image file:
 
 ```bash
-curl -X POST -F "image=@/path/to/your/image.jpg" http://localhost:3000/api/v1/ocr
+curl -X POST "http://localhost:3000/api/v1/ocr" \
+  -H "Accept: application/json" \
+  -F "image=@/path/to/your/image.jpg"
 ```
 
 ## Configuration
