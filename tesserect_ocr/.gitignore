@@ -12,7 +12,7 @@ npm-debug.*
 yarn-debug.*
 yarn-error.*
 
-# macOS
+# macOS misc files
 .DS_Store
 *.pem
 
