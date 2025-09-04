@@ -1,6 +1,6 @@
 const extensionId = chrome.runtime.id;
 
-// OpenDyslexic font styles
+// Font styles
 const style = document.createElement("style");
 style.textContent = `
 @font-face {
@@ -20,19 +20,39 @@ html.opendyslexic-enabled, html.opendyslexic-enabled body, html.opendyslexic-ena
 }`;
 document.head.appendChild(style);
 
-// Check initial state
-chrome.storage.sync.get(['enabled'], function(result) {
-  const enabled = result.enabled !== false;
-  if (enabled) {
+// Check initial states
+chrome.storage.sync.get(['fontEnabled', 'spacingEnabled'], function(result) {
+  const fontEnabled = result.fontEnabled !== false;
+  const spacingEnabled = result.spacingEnabled || false;
+  
+  if (fontEnabled) {
     document.documentElement.classList.add("opendyslexic-enabled");
+  }
+  if (spacingEnabled) {
+    document.documentElement.classList.add("letter-spacing-enabled");
   }
 });
 
 // Listen for messages from popup
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'enable') {
-    document.documentElement.classList.add("opendyslexic-enabled");
-  } else if (message.action === 'disable') {
-    document.documentElement.classList.remove("opendyslexic-enabled");
+  console.log('Message received:', message); // Debug logging
+  
+  switch(message.action) {
+    case 'enableFont':
+      document.documentElement.classList.add("opendyslexic-enabled");
+      break;
+    case 'disableFont':
+      document.documentElement.classList.remove("opendyslexic-enabled");
+      break;
+    case 'enableSpacing':
+      document.documentElement.classList.add("letter-spacing-enabled");
+      break;
+    case 'disableSpacing':
+      document.documentElement.classList.remove("letter-spacing-enabled");
+      break;
   }
+  
+  // Always send a response to close the message channel
+  sendResponse({ success: true });
+  return true; // Required to use sendResponse asynchronously
 });

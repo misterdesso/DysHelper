@@ -1,23 +1,43 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const toggle = document.getElementById('toggle');
-  const statusText = document.getElementById('status-text');
+  const fontToggle = document.getElementById('font-toggle');
+  const spacingToggle = document.getElementById('spacing-toggle');
   
-  // Get current state
-  chrome.storage.sync.get(['enabled'], function(result) {
-    const enabled = result.enabled !== false; // Default to true
-    toggle.checked = enabled;
-    statusText.textContent = enabled ? 'Enabled' : 'Disabled';
+  // Get current states
+  chrome.storage.sync.get(['fontEnabled', 'spacingEnabled'], function(result) {
+    // Set default values
+    const fontEnabled = result.fontEnabled !== false; // Default to true
+    const spacingEnabled = result.spacingEnabled || false; // Default to false
+    
+    // Update toggle states
+    fontToggle.checked = fontEnabled;
+    spacingToggle.checked = spacingEnabled;
   });
   
-  // Toggle state when switch is clicked
-  toggle.addEventListener('change', function() {
+  // Font toggle handler
+  fontToggle.addEventListener('change', function() {
     const enabled = this.checked;
-    chrome.storage.sync.set({ enabled: enabled });
-    statusText.textContent = enabled ? 'Enabled' : 'Disabled';
+    chrome.storage.sync.set({ fontEnabled: enabled });
     
-    // Send message to current tab to update font
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { action: enabled ? 'enable' : 'disable' });
+      if (tabs[0]) {  // Check if there's an active tab
+        chrome.tabs.sendMessage(tabs[0].id, { 
+          action: enabled ? 'enableFont' : 'disableFont' 
+        });
+      }
+    });
+  });
+
+  // Spacing toggle handler
+  spacingToggle.addEventListener('change', function() {
+    const enabled = this.checked;
+    chrome.storage.sync.set({ spacingEnabled: enabled });
+    
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      if (tabs[0]) {  // Check if there's an active tab
+        chrome.tabs.sendMessage(tabs[0].id, { 
+          action: enabled ? 'enableSpacing' : 'disableSpacing' 
+        });
+      }
     });
   });
 });

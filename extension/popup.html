@@ -1,21 +1,28 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="popup.css">
-</head>
-<body>
-  <div class="container">
-    <h1>DysHelper</h1>
-    <div class="toggle-container">
-      <label class="switch">
-        <input type="checkbox" id="toggle">
-        <span class="slider round"></span>
-      </label>
-      <span id="status-text">Enabled</span>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>DysHelper</h1>
+      <div class="toggle-container">
+        <span class="option-text">OpenDyslexic Font</span>
+        <label class="switch">
+          <input type="checkbox" id="font-toggle" />
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div class="toggle-container">
+        <span class="option-text">Letter Spacing</span>
+        <label class="switch">
+          <input type="checkbox" id="spacing-toggle" />
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <p>Customize text display for improved readability</p>
     </div>
-    <p>Improves readability by changing webpage fonts to OpenDyslexic</p>
-  </div>
-  <script src="popup.js"></script>
-</body>
+    <script src="popup.js"></script>
+  </body>
 </html>

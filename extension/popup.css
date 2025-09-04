@@ -16,9 +16,10 @@ h1 {
 .toggle-container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 10px;
-  margin: 20px 0;
+  margin: 15px 0;
+  padding: 0 20px;
 }
 
 /* Switch styling */
@@ -73,12 +74,19 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-#status-text {
+.option-text {
   font-weight: bold;
+  font-size: 14px;
+  color: #2c3e50;
 }
 
 p {
   color: #666;
   line-height: 1.4;
   margin-top: 20px;
+}
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('fonts/OpenDyslexic-Regular.woff2') format('woff2'),             /* Super Modern Browsers */
 }
