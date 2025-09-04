@@ -3,7 +3,10 @@
   "name": "DysHelper",
   "version": "1.0",
   "description": "Automatically replaces fonts on webpages with the OpenDyslexic font for better readability.",
-  "permissions": ["scripting", "activeTab"],
+  "permissions": ["scripting", "activeTab", "storage"],
+  "action": {
+    "default_popup": "popup.html"
+  },
   "background": {
     "service_worker": "background.js"
   },
