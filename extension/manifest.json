@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "DysHelper",
+  "version": "1.0",
+  "description": "Automatically replaces fonts on webpages with the OpenDyslexic font for better readability.",
+  "permissions": ["scripting", "activeTab"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["styles.css"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["fonts/*.woff2"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
