@@ -3,7 +3,7 @@
   <h1>DysHelper</h1>
 </div>
 
-DysHelper is a powerful yet lightweight Chrome extension designed to enhance web accessibility for users with dyslexia. By combining the OpenDyslexic font with smart text spacing and OCR capabilities, digital content becomes more readble and accessible even for those with particular needs.
+**DysHelper** is a lightweight yet impactful Chrome extension that brings accessibility to the web for everyone. Built with dyslexic users in mind, it transforms online content to make reading smoother and less overwhelming. Our goal goes beyond dyslexia — DysHelper is about creating a more inclusive internet where digital content is clearer, friendlier, and easier to navigate for all.
 
 ## Features
 
