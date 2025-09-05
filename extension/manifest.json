@@ -3,7 +3,14 @@
   "name": "DysHelper",
   "version": "1.0",
   "description": "Automatically replaces fonts on webpages with the OpenDyslexic font for better readability.",
-  "permissions": ["scripting", "activeTab", "storage"],
+  "permissions": [
+    "scripting",
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://localhost:3000/*"
+  ],
   "action": {
     "default_popup": "popup.html"
   },
@@ -19,7 +26,10 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["fonts/*.woff2"],
+      "resources": [
+        "fonts/*.woff2",
+        "ocr-result.html"
+      ],
       "matches": ["<all_urls>"]
     }
   ]

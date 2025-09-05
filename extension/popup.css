@@ -86,6 +86,43 @@ p {
   margin-top: 20px;
 }
 
+.upload-section {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.upload-button {
+  display: inline-block;
+  background-color: #2196F3;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.upload-button:hover {
+  background-color: #1976D2;
+}
+
+.upload-button input[type="file"] {
+  display: none;
+}
+
+.status-message {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.status-message.error {
+  color: #d32f2f;
+}
+
+.status-message.success {
+  color: #388e3c;
+}
+
 @font-face {
     font-family: 'OpenDyslexic';
     src: url('fonts/OpenDyslexic-Regular.woff2') format('woff2'),             /* Super Modern Browsers */
