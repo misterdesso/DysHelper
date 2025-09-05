@@ -85,7 +85,7 @@ fs.mkdir(outputFolder, { recursive: true }).catch(err => {
  */
 app.post('/api/v1/ocr', upload.single('image'), async (req, res) => {
   if (!req.file) {
-    return res.status(400).json({ error: 'No image file uploaded. Please upload an "image" field.' });
+    return res.status(400).json({ success: false, error: 'No image file uploaded. Please upload an "image" field.' });
   }
 
   const filePath = req.file.path;
@@ -118,17 +118,20 @@ app.post('/api/v1/ocr', upload.single('image'), async (req, res) => {
       ocrResult.text
     );
 
+    // Modified response structure to match frontend expectations
     res.json({
       success: true,
-      extractedText: ocrResult.text,
-      details: {
-        confidence: ocrResult.confidence,
-        words: ocrResult.wordsCount || null
-      }
+      text: ocrResult.text,  // Changed from extractedText to text
+      confidence: ocrResult.confidence,
+      wordsCount: ocrResult.wordsCount
     });
   } catch (err) {
     console.error('OCR processing failed:', err);
-    res.status(500).json({ success: false, error: 'OCR processing failed', message: err.message });
+    res.status(500).json({ 
+      success: false, 
+      error: 'OCR processing failed', 
+      message: err.message 
+    });
   } finally {
     // clean up the uploaded file no matter what
     try {
