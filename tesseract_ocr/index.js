@@ -66,7 +66,7 @@ app.post("/api/v1/ocr", upload.single("image"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({
       success: false,
-      error: 'No image file uploaded. Please upload an "image" field.',
+      error: 'No image file uploaded.',
     });
   }
 
