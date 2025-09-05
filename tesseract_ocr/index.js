@@ -83,130 +83,72 @@ fs.mkdir(outputFolder, { recursive: true }).catch(err => {
  * - Optional query/body params could be added later (language, enhanceImage, etc.)
  * - Returns: { text: "...", raw: {...} }
  */
-
 app.post('/api/v1/ocr', upload.single('image'), async (req, res) => {
-   if (!req.file) {
-     return res.status(400).json({ error: 'No image file uploaded. Please upload an "image" field.' });
-   }
- 
-   const filePath = req.file.path;
-  const structured = req.query.structured === 'true'; // ← added
- 
-   try {
-    const ocrResult = await performOCR(filePath, { lang: 'eng', structured });
- 
-     // Save OCR results to files
-     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-     
-    if (structured) {
-      // Save as JSON/TXT (structured)
-      const jsonOutput = { timestamp, originalFile: req.file.originalname, result: ocrResult };
-      await fs.writeFile(path.join(outputFolder, `output-${timestamp}.json`), JSON.stringify(jsonOutput, null, 2));
-      await fs.writeFile(path.join(outputFolder, `output-${timestamp}.txt`), ocrResult.plain_text || '');
+  if (!req.file) {
+    return res.status(400).json({ error: 'No image file uploaded. Please upload an "image" field.' });
+  }
 
-      // Respond with normalised shape for the app
-      return res.json({ engine: 'tesseract', ...ocrResult });
-    } else {
-      // Save as JSON/TXT (original PoC)
-      const jsonOutput = {
-        timestamp,
-        originalFile: req.file.originalname,
-        results: {
-          text: ocrResult.text,
-          confidence: ocrResult.confidence,
-          wordsCount: ocrResult.wordsCount
-        }
-      };
-      await fs.writeFile(path.join(outputFolder, `output-${timestamp}.json`), JSON.stringify(jsonOutput, null, 2));
-      await fs.writeFile(path.join(outputFolder, `output-${timestamp}.txt`), ocrResult.text || '');
+  const filePath = req.file.path;
 
-      // Respond with original PoC shape
-      return res.json({
-        success: true,
-        extractedText: ocrResult.text,
-        details: { confidence: ocrResult.confidence, words: ocrResult.wordsCount || null }
-      });
+  try {
+    const ocrResult = await performOCR(filePath, { lang: 'eng' });
+
+    // Save OCR results to files
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    
+    // Save as JSON
+    const jsonOutput = {
+      timestamp,
+      originalFile: req.file.originalname,
+      results: {
+        text: ocrResult.text,
+        confidence: ocrResult.confidence,
+        wordsCount: ocrResult.wordsCount
+      }
+    };
+    
+    await fs.writeFile(
+      path.join(outputFolder, `output-${timestamp}.json`),
+      JSON.stringify(jsonOutput, null, 2)
+    );
+
+    // Save as TXT
+    await fs.writeFile(
+      path.join(outputFolder, `output-${timestamp}.txt`),
+      ocrResult.text
+    );
+
+    res.json({
+      success: true,
+      extractedText: ocrResult.text,
+      details: {
+        confidence: ocrResult.confidence,
+        words: ocrResult.wordsCount || null
+      }
+    });
+  } catch (err) {
+    console.error('OCR processing failed:', err);
+    res.status(500).json({ success: false, error: 'OCR processing failed', message: err.message });
+  } finally {
+    // clean up the uploaded file no matter what
+    try {
+      await fs.unlink(filePath);
+    } catch (cleanupErr) {
+      // non-fatal, just log
+      console.warn('Failed to delete temp file:', filePath, cleanupErr);
     }
-   } catch (err) {
-     console.error('OCR processing failed:', err);
-     res.status(500).json({ success: false, error: 'OCR processing failed', message: err.message });
-   } finally {
-     // clean up the uploaded file no matter what
-     try {
-       await fs.unlink(filePath);
-     } catch (cleanupErr) {
-       // non-fatal, just log
-       console.warn('Failed to delete temp file:', filePath, cleanupErr);
-     }
-   }
- });
+  }
+});
 
-// app.post('/api/v1/ocr', upload.single('image'), async (req, res) => {
-//   if (!req.file) {
-//     return res.status(400).json({ error: 'No image file uploaded. Please upload an "image" field.' });
-//   }
+// simple health check
+app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
-//   const filePath = req.file.path;
+// global error handler (basic)
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ error: err.message || 'Internal Server Error' });
+});
 
-//   try {
-//     const ocrResult = await performOCR(filePath, { lang: 'eng' });
-
-//     // Save OCR results to files
-//     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    
-//     // Save as JSON
-//     const jsonOutput = {
-//       timestamp,
-//       originalFile: req.file.originalname,
-//       results: {
-//         text: ocrResult.text,
-//         confidence: ocrResult.confidence,
-//         wordsCount: ocrResult.wordsCount
-//       }
-//     };
-    
-//     await fs.writeFile(
-//       path.join(outputFolder, `output-${timestamp}.json`),
-//       JSON.stringify(jsonOutput, null, 2)
-//     );
-
-//     // Save as TXT
-//     await fs.writeFile(
-//       path.join(outputFolder, `output-${timestamp}.txt`),
-//       ocrResult.text
-//     );
-
-//     res.json({
-//       success: true,
-//       extractedText: ocrResult.text,
-//       details: {
-//         confidence: ocrResult.confidence,
-//         words: ocrResult.wordsCount || null
-//       }
-//     });
-//   } catch (err) {
-//     console.error('OCR processing failed:', err);
-//     res.status(500).json({ success: false, error: 'OCR processing failed', message: err.message });
-//   } finally {
-//     // clean up the uploaded file no matter what
-//     try {
-//       await fs.unlink(filePath);
-//     } catch (cleanupErr) {
-//       // non-fatal, just log
-//       console.warn('Failed to delete temp file:', filePath, cleanupErr);
-//     }
-//   }
-// });
-
-// // simple health check
-// app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
-
-// // global error handler (basic)
-// app.use((err, req, res, next) => {
-//   console.error('Unhandled error:', err);
-//   res.status(500).json({ error: err.message || 'Internal Server Error' });
-// });
-
-// app.listen(PORT, () => {
-//   console.log(`OCR server listening on port ${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`OCR server listening on port ${PORT}`);
+});

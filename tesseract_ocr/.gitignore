@@ -9,8 +9,6 @@ ocr_outputs/
 
 # debug
 npm-debug.*
-yarn-debug.*
-yarn-error.*
 
 # macOS misc files
 **/.DS_Store
@@ -22,3 +20,4 @@ yarn-error.*
 .env
 .env.local
 .env.*.local
+
