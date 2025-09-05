@@ -1,16 +1,30 @@
 body {
-  width: 300px;
-  padding: 15px;
-  font-family: 'OpenDyslexic', sans-serif;
+  width: 280px;
+  padding: 10px;
+  font-family: "OpenDyslexic", sans-serif;
 }
 
 .container {
   text-align: center;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
 h1 {
   color: #2c3e50;
-  margin-bottom: 20px;
+  margin: 0;
 }
 
 .toggle-container {
@@ -22,7 +36,6 @@ h1 {
   padding: 0 20px;
 }
 
-/* Switch styling */
 .switch {
   position: relative;
   display: inline-block;
@@ -44,7 +57,7 @@ h1 {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  transition: .4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -55,11 +68,11 @@ h1 {
   left: 4px;
   bottom: 4px;
   background-color: white;
-  transition: .4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 input:checked + .slider:before {
@@ -75,7 +88,7 @@ input:checked + .slider:before {
 }
 
 .option-text {
-  font-weight: bold;
+  font-weight: normal;
   font-size: 14px;
   color: #2c3e50;
 }
@@ -86,7 +99,53 @@ p {
   margin-top: 20px;
 }
 
+.upload-section {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.upload-button {
+  display: inline-block;
+  background-color: #2196f3;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.upload-button:hover {
+  background-color: #1976d2;
+}
+
+.upload-button input[type="file"] {
+  display: none;
+}
+
+.status-message {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.status-message.error {
+  color: #d32f2f;
+}
+
+.status-message.success {
+  color: #388e3c;
+}
+
 @font-face {
-    font-family: 'OpenDyslexic';
-    src: url('fonts/OpenDyslexic-Regular.woff2') format('woff2'),             /* Super Modern Browsers */
+  font-family: "OpenDyslexic";
+  src: url("fonts/OpenDyslexic-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("fonts/OpenDyslexic-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
 }

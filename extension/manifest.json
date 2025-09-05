@@ -2,8 +2,14 @@
   "manifest_version": 3,
   "name": "DysHelper",
   "version": "1.0",
-  "description": "Automatically replaces fonts on webpages with the OpenDyslexic font for better readability.",
-  "permissions": ["scripting", "activeTab", "storage"],
+  "description": "An all-in-one extension to make the web more accessible for dyslexic users.",
+  "icons": {
+    "16": "icons/logo_16.png",
+    "48": "icons/logo_48.png",
+    "128": "icons/logo_128.png"
+  },
+  "permissions": ["scripting", "activeTab", "storage", "tabs"],
+  "host_permissions": ["http://localhost:3000/*"],
   "action": {
     "default_popup": "popup.html"
   },
@@ -19,7 +25,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["fonts/*.woff2"],
+      "resources": ["fonts/*.woff2", "ocr-result.html"],
       "matches": ["<all_urls>"]
     }
   ]

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html class="opendyslexic-enabled">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        margin: 40px;
+        padding: 20px;
+        line-height: 1.8;
+        background-color: #f5f5f5;
+        font-family: "OpenDyslexic", sans-serif;
+      }
+      #loading,
+      #error {
+        text-align: center;
+        padding: 2rem;
+        font-size: 18px;
+        color: #666;
+      }
+      #error {
+        color: #d32f2f;
+      }
+      #ocrText {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        font-size: 24px;
+        line-height: 1.8;
+        white-space: pre-wrap;
+        color: #333;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loading">Converting image to text...</div>
+    <div id="error" style="display: none"></div>
+    <div id="ocrText" style="display: none"></div>
+    <script src="ocr-result.js"></script>
+  </body>
+</html>

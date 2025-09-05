@@ -6,7 +6,10 @@
   </head>
   <body>
     <div class="container">
-      <h1>DysHelper</h1>
+      <div class="header">
+        <img src="icons/logo_500.png" alt="DysHelper Logo" class="logo" />
+        <h1>DysHelper</h1>
+      </div>
       <div class="toggle-container">
         <span class="option-text">OpenDyslexic Font</span>
         <label class="switch">
@@ -21,7 +24,13 @@
           <span class="slider round"></span>
         </label>
       </div>
-      <p>Customize text display for improved readability</p>
+      <div class="upload-section">
+        <label for="image-upload" class="upload-button">
+          Upload Screenshot
+          <input type="file" id="image-upload" accept="image/*" />
+        </label>
+        <div id="upload-status" class="status-message"></div>
+      </div>
     </div>
     <script src="popup.js"></script>
   </body>
