@@ -1,11 +1,9 @@
-/* Apply globally if the extension is enabled */
 html.opendyslexic-enabled,
 html.opendyslexic-enabled body,
 html.opendyslexic-enabled * {
-  font-family: 'OpenDyslexic', sans-serif !important;
+  font-family: "OpenDyslexic", sans-serif !important;
 }
 
-/* Add letter spacing styles */
 html.letter-spacing-enabled,
 html.letter-spacing-enabled body,
 html.letter-spacing-enabled * {
@@ -14,15 +12,15 @@ html.letter-spacing-enabled * {
 }
 
 @font-face {
-  font-family: 'OpenDyslexic';
-  src: url('fonts/OpenDyslexic-Regular.woff2') format('woff2');
+  font-family: "OpenDyslexic";
+  src: url("fonts/OpenDyslexic-Regular.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'OpenDyslexic';
-  src: url('fonts/OpenDyslexic-Bold.woff2') format('woff2');
+  font-family: "OpenDyslexic";
+  src: url("fonts/OpenDyslexic-Bold.woff2") format("woff2");
   font-weight: bold;
   font-style: normal;
 }

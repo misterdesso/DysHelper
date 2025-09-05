@@ -1,7 +1,7 @@
 body {
   width: 300px;
   padding: 15px;
-  font-family: 'OpenDyslexic', sans-serif;
+  font-family: "OpenDyslexic", sans-serif;
 }
 
 .container {
@@ -44,7 +44,7 @@ h1 {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  transition: .4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -55,11 +55,11 @@ h1 {
   left: 4px;
   bottom: 4px;
   background-color: white;
-  transition: .4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 input:checked + .slider:before {
@@ -93,7 +93,7 @@ p {
 
 .upload-button {
   display: inline-block;
-  background-color: #2196F3;
+  background-color: #2196f3;
   color: white;
   padding: 10px 20px;
   border-radius: 5px;
@@ -102,7 +102,7 @@ p {
 }
 
 .upload-button:hover {
-  background-color: #1976D2;
+  background-color: #1976d2;
 }
 
 .upload-button input[type="file"] {
@@ -124,6 +124,6 @@ p {
 }
 
 @font-face {
-    font-family: 'OpenDyslexic';
-    src: url('fonts/OpenDyslexic-Regular.woff2') format('woff2'),             /* Super Modern Browsers */
+  font-family: "OpenDyslexic";
+  src: url("fonts/OpenDyslexic-Regular.woff2") format("woff2"); /* Super Modern Browsers */
 }
