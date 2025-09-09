@@ -61,8 +61,8 @@ fs.mkdir(outputFolder, { recursive: true }).catch((err) => {
   console.error("Failed to create output directory:", err);
 });
 
-// Routing (POST /api/v1/ocr)
-app.post("/api/v1/ocr", upload.single("image"), async (req, res) => {
+// Routing (POST /api/ocr)
+app.post("/api/ocr", upload.single("image"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({
       success: false,
@@ -122,6 +122,10 @@ app.post("/api/v1/ocr", upload.single("image"), async (req, res) => {
       console.warn("Failed to delete temp file:", filePath, cleanupErr);
     }
   }
+});
+
+app.get("/", (req, res) => {
+  res.send("DysHelper OCR API is running");
 });
 
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
