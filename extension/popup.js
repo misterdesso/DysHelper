@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const spacingToggle = document.getElementById("spacing-toggle");
   const imageUpload = document.getElementById("image-upload");
   const uploadStatus = document.getElementById("upload-status");
-  const OCR_API_URL = "https://dyshelper.onrender.com/api/ocr";
+  const OCR_API_URL = "https://dyshelper.onrender.com/api/v1/ocr";
 
   // State handler
   chrome.storage.sync.get(["fontEnabled", "spacingEnabled"], function (result) {
