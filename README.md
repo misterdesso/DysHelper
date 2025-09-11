@@ -15,6 +15,16 @@
 
 ## Installation
 
+### Users
+1. Navigate to our [latest release](https://github.com/misterdesso/DysHelper/releases/latest) and download the `extension.crx` file
+
+2. Open Chrome, click on the 3-dot menu in the top right corner and go to Extensions > Manage Extensions
+
+3. Enable "Developer mode" in the top right corner
+
+4. Drag and drop the `extension.crx` file into the page
+
+### Developers
 1. Clone the repository:
 ```bash
 git clone https://github.com/misterdesso/DysHelper.git
