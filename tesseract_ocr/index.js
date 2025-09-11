@@ -124,6 +124,10 @@ app.post("/api/v1/ocr", upload.single("image"), async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.send("DysHelper OCR API is running");
+});
+
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
 app.use((err, req, res, next) => {

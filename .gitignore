@@ -10,3 +10,6 @@
 .env
 .env.local
 .env.*.local
+
+# Extension key files
+extension.pem
