@@ -15,8 +15,6 @@
 
 ## Installation
 
-### Chrome Extension
-
 1. Clone the repository:
 ```bash
 git clone https://github.com/misterdesso/DysHelper.git
@@ -27,25 +25,6 @@ git clone https://github.com/misterdesso/DysHelper.git
 3. Enable "Developer mode" in the top right corner
 
 4. Click "Load unpacked" and select the `extension` folder from the cloned repository
-
-### OCR Server
-
-1. Navigate to the OCR server directory:
-```bash
-cd tesseract_ocr
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start the server:
-```bash
-npm run dev
-```
-
-The OCR server will run on `http://localhost:3000`
 
 ## Dependencies
 
@@ -64,6 +43,8 @@ The OCR server will run on `http://localhost:3000`
   - multer
   - uuid
 
+The OCR functionality is provided through our hosted service at `dyshelper.onrender.com`, eliminating the need for local server setup.
+
 ## Usage
 
 1. Click the DysHelper icon in your Chrome toolbar
@@ -76,10 +57,9 @@ The OCR server will run on `http://localhost:3000`
 
 ## Configuration
 
-### OCR Server
+### OCR Service
 - Max file size: 8MB
 - Supported formats: JPEG, PNG, WEBP, HEIC
-- Default port: 3000 (configurable via PORT environment variable)
 
 ### Extension
 - Font options: Regular, Bold, Italic, Bold Italic
