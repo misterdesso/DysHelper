@@ -4,13 +4,16 @@
   "private": true,
   "description": "Chrome extension to make the web more accessible for dyslexic users",
   "scripts": {
-    "lint": "eslint 'extension/**/*.js'",
-    "lint:fix": "eslint 'extension/**/*.js' --fix",
-    "format": "prettier --write 'extension/**/*.{js,css,html}'",
-    "format:check": "prettier --check 'extension/**/*.{js,css,html}'"
+    "build": "node esbuild.config.mjs",
+    "dev": "node esbuild.config.mjs --watch",
+    "lint": "eslint 'src/**/*.js'",
+    "lint:fix": "eslint 'src/**/*.js' --fix",
+    "format": "prettier --write 'src/**/*.{js,css,html}' 'static/**/*.json'",
+    "format:check": "prettier --check 'src/**/*.{js,css,html}' 'static/**/*.json'"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "esbuild": "^0.28.1",
     "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.8.0",

@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Open results in new tab
       chrome.tabs.create({
-        url: chrome.runtime.getURL("ocr-result.html"),
+        url: chrome.runtime.getURL("ocr/ocr-result.html"),
       });
 
       uploadStatus.textContent = "Text extracted successfully!";
