@@ -1,24 +1,20 @@
-const extensionId = chrome.runtime.id;
-
-// Font styles
-const style = document.createElement("style");
-style.textContent = `
+// Inject @font-face with absolute extension URLs (required because
+// manifest-injected CSS resolves urls relative to the page origin)
+const fontStyle = document.createElement("style");
+fontStyle.textContent = `
 @font-face {
   font-family: 'OpenDyslexic';
-  src: url("chrome-extension://${extensionId}/fonts/OpenDyslexic-Regular.woff2") format("woff2");
+  src: url("${chrome.runtime.getURL("fonts/OpenDyslexic-Regular.woff2")}") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'OpenDyslexic';
-  src: url("chrome-extension://${extensionId}/fonts/OpenDyslexic-Bold.woff2") format("woff2");
+  src: url("${chrome.runtime.getURL("fonts/OpenDyslexic-Bold.woff2")}") format("woff2");
   font-weight: bold;
   font-style: normal;
-}
-html.opendyslexic-enabled, html.opendyslexic-enabled body, html.opendyslexic-enabled * {
-  font-family: 'OpenDyslexic', sans-serif !important;
 }`;
-document.head.appendChild(style);
+document.head.appendChild(fontStyle);
 
 // Check initial states
 chrome.storage.sync.get(["fontEnabled", "spacingEnabled"], function (result) {
@@ -34,8 +30,7 @@ chrome.storage.sync.get(["fontEnabled", "spacingEnabled"], function (result) {
 });
 
 // Listen for messages from popup ui
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log("Message received:", message);
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
   switch (message.action) {
     case "enableFont":
