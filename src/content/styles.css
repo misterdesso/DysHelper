@@ -3,6 +3,20 @@ html.opendyslexic-enabled {
 }
 
 html.opendyslexic-enabled body,
+html.opendyslexic-enabled div,
+html.opendyslexic-enabled span,
+html.opendyslexic-enabled p,
+html.opendyslexic-enabled a,
+html.opendyslexic-enabled li,
+html.opendyslexic-enabled td,
+html.opendyslexic-enabled th,
+html.opendyslexic-enabled h1,
+html.opendyslexic-enabled h2,
+html.opendyslexic-enabled h3,
+html.opendyslexic-enabled h4,
+html.opendyslexic-enabled h5,
+html.opendyslexic-enabled h6,
+html.opendyslexic-enabled label,
 html.opendyslexic-enabled input,
 html.opendyslexic-enabled button,
 html.opendyslexic-enabled select,
@@ -10,7 +24,16 @@ html.opendyslexic-enabled textarea,
 html.opendyslexic-enabled pre,
 html.opendyslexic-enabled code,
 html.opendyslexic-enabled kbd,
-html.opendyslexic-enabled samp {
+html.opendyslexic-enabled samp,
+html.opendyslexic-enabled blockquote,
+html.opendyslexic-enabled figcaption,
+html.opendyslexic-enabled article,
+html.opendyslexic-enabled section,
+html.opendyslexic-enabled nav,
+html.opendyslexic-enabled header,
+html.opendyslexic-enabled footer,
+html.opendyslexic-enabled main,
+html.opendyslexic-enabled aside {
   font-family: inherit !important;
 }
 
@@ -19,6 +42,17 @@ html.letter-spacing-enabled {
   word-spacing: 0.25em !important;
 }
 
+html.letter-spacing-enabled div,
+html.letter-spacing-enabled span,
+html.letter-spacing-enabled p,
+html.letter-spacing-enabled a,
+html.letter-spacing-enabled li,
+html.letter-spacing-enabled h1,
+html.letter-spacing-enabled h2,
+html.letter-spacing-enabled h3,
+html.letter-spacing-enabled h4,
+html.letter-spacing-enabled h5,
+html.letter-spacing-enabled h6,
 html.letter-spacing-enabled input,
 html.letter-spacing-enabled button,
 html.letter-spacing-enabled select,

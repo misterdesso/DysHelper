@@ -1,35 +1,62 @@
-document.addEventListener("DOMContentLoaded", function () {
+import Tesseract from "tesseract.js";
+
+document.addEventListener("DOMContentLoaded", async function () {
   const loadingEl = document.getElementById("loading");
+  const progressBar = document.getElementById("progress");
+  const progressContainer = document.getElementById("progress-container");
   const errorEl = document.getElementById("error");
   const ocrTextEl = document.getElementById("ocrText");
 
-  console.log("OCR result page loaded");
+  try {
+    const { ocrImage } = await new Promise((resolve, reject) => {
+      chrome.storage.local.get(["ocrImage"], (result) => {
+        if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
+        else resolve(result);
+      });
+    });
 
-  // Get OCR result from backend
-  chrome.storage.local.get(["ocrResult"], function (result) {
-    if (chrome.runtime.lastError) {
-      console.error("Error retrieving OCR result:", chrome.runtime.lastError);
-      showError("Failed to retrieve OCR result");
+    if (!ocrImage) {
+      showError("No image found. Please upload an image from the popup.");
       return;
     }
 
-    if (!result.ocrResult) {
-      showError("No OCR result found");
+    chrome.storage.local.remove("ocrImage");
+
+    loadingEl.textContent = "Recognizing text...";
+    progressContainer.style.display = "block";
+
+    const { data } = await Tesseract.recognize(ocrImage, "eng", {
+      workerPath: chrome.runtime.getURL("ocr/tesseract-worker.js"),
+      corePath: chrome.runtime.getURL("ocr/tesseract-core"),
+      workerBlobURL: false,
+      logger: (info) => {
+        if (info.status === "recognizing text") {
+          const pct = Math.round(info.progress * 100);
+          progressBar.textContent = `${pct}%`;
+          progressBar.style.width = `${pct}%`;
+        } else if (info.status) {
+          loadingEl.textContent =
+            info.status.charAt(0).toUpperCase() + info.status.slice(1) + "...";
+        }
+      },
+    });
+
+    if (!data.text || !data.text.trim()) {
+      showError("No text could be extracted from this image.");
       return;
     }
 
-    // Display text
     loadingEl.style.display = "none";
-    errorEl.style.display = "none";
+    progressContainer.style.display = "none";
     ocrTextEl.style.display = "block";
-    ocrTextEl.textContent = result.ocrResult;
-
-    // Clear the stored result
-    chrome.storage.local.remove("ocrResult");
-  });
+    ocrTextEl.textContent = data.text;
+  } catch (err) {
+    showError(`OCR failed: ${err?.message || err || "Unknown error"}`);
+  }
 
   function showError(message) {
     loadingEl.style.display = "none";
+    progressContainer.style.display = "none";
     errorEl.style.display = "block";
     errorEl.textContent = message;
   }

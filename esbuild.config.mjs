@@ -15,6 +15,7 @@ const buildOptions = {
   outbase: "src",
   format: "iife",
   target: "chrome120",
+  platform: "browser",
   sourcemap: isWatch,
   minify: !isWatch,
 };
@@ -28,6 +29,14 @@ function copyStatic() {
   cpSync("src/popup/popup.html", "dist/popup/popup.html");
   cpSync("src/popup/popup.css", "dist/popup/popup.css");
   cpSync("src/ocr/ocr-result.html", "dist/ocr/ocr-result.html");
+  cpSync(
+    "node_modules/tesseract.js/dist/worker.min.js",
+    "dist/ocr/tesseract-worker.js",
+  );
+  cpSync("node_modules/tesseract.js-core", "dist/ocr/tesseract-core", {
+    recursive: true,
+    filter: (src) => src.endsWith("tesseract.js-core") || src.endsWith(".wasm.js"),
+  });
 }
 
 copyStatic();

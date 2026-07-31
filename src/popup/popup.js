@@ -3,15 +3,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const spacingToggle = document.getElementById("spacing-toggle");
   const imageUpload = document.getElementById("image-upload");
   const uploadStatus = document.getElementById("upload-status");
-  const OCR_API_URL = "https://dyshelper.onrender.com/api/v1/ocr";
 
   // State handler
   chrome.storage.sync.get(["fontEnabled", "spacingEnabled"], function (result) {
-    // Set default values
-    const fontEnabled = result.fontEnabled !== false; // True
-    const spacingEnabled = result.spacingEnabled || false; // False
+    const fontEnabled = result.fontEnabled !== false;
+    const spacingEnabled = result.spacingEnabled || false;
 
-    // Update toggle states
     fontToggle.checked = fontEnabled;
     spacingToggle.checked = spacingEnabled;
   });
@@ -23,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       if (tabs[0]) {
-        // Check for active tabs
         chrome.tabs.sendMessage(tabs[0].id, {
           action: enabled ? "enableFont" : "disableFont",
         });
@@ -38,7 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       if (tabs[0]) {
-        // Check for active tabs
         chrome.tabs.sendMessage(tabs[0].id, {
           action: enabled ? "enableSpacing" : "disableSpacing",
         });
@@ -46,59 +41,49 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  // OCR image upload handler
   imageUpload.addEventListener("change", async function (e) {
     const file = e.target.files[0];
     if (!file) return;
 
-    uploadStatus.textContent = "Uploading image...";
+    if (file.size > 5 * 1024 * 1024) {
+      uploadStatus.textContent = "Error: Image must be under 5MB";
+      uploadStatus.className = "status-message error";
+      return;
+    }
+
+    uploadStatus.textContent = "Preparing image...";
     uploadStatus.className = "status-message";
 
-    const formData = new FormData();
-    formData.append("image", file);
-
     try {
-      const response = await fetch(OCR_API_URL, {
-        method: "POST",
-        body: formData,
-      });
+      const dataUrl = await fileToDataURL(file);
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to process image");
-      }
-
-      if (!result.text) {
-        throw new Error("No text found in OCR response");
-      }
-
-      // Store the OCR result in browser
       await new Promise((resolve, reject) => {
-        chrome.storage.local.set(
-          {
-            ocrResult: result.text,
-          },
-          () => {
-            if (chrome.runtime.lastError) {
-              reject(chrome.runtime.lastError);
-            } else {
-              resolve();
-            }
-          },
-        );
+        chrome.storage.local.set({ ocrImage: dataUrl }, () => {
+          if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
+          else resolve();
+        });
       });
 
-      // Open results in new tab
       chrome.tabs.create({
         url: chrome.runtime.getURL("ocr/ocr-result.html"),
       });
 
-      uploadStatus.textContent = "Text extracted successfully!";
+      uploadStatus.textContent = "Processing in new tab...";
       uploadStatus.className = "status-message success";
     } catch (error) {
-      console.error("Upload/OCR error:", error);
+      console.error("OCR error:", error);
       uploadStatus.textContent = `Error: ${error.message}`;
       uploadStatus.className = "status-message error";
     }
   });
 });
+
+function fileToDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}

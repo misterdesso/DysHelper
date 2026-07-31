@@ -21,6 +21,24 @@
       #error {
         color: #d32f2f;
       }
+      #progress-container {
+        display: none;
+        max-width: 400px;
+        margin: 1rem auto;
+        background: #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      #progress {
+        height: 24px;
+        background: #2196f3;
+        color: #fff;
+        font-size: 13px;
+        line-height: 24px;
+        text-align: center;
+        width: 0%;
+        transition: width 0.3s;
+      }
       #ocrText {
         max-width: 800px;
         margin: 0 auto;
@@ -36,7 +54,10 @@
     </style>
   </head>
   <body>
-    <div id="loading">Converting image to text...</div>
+    <div id="loading">Initializing OCR...</div>
+    <div id="progress-container">
+      <div id="progress">0%</div>
+    </div>
     <div id="error" style="display: none"></div>
     <div id="ocrText" style="display: none"></div>
     <script src="ocr-result.js"></script>
