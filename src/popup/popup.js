@@ -1,82 +1,61 @@
-document.addEventListener("DOMContentLoaded", function () {
+import { getSync, setSync, setLocal } from "../shared/storage.js";
+import { sendToActiveTab } from "../shared/messaging.js";
+
+document.addEventListener("DOMContentLoaded", async function () {
   const fontToggle = document.getElementById("font-toggle");
   const spacingToggle = document.getElementById("spacing-toggle");
   const imageUpload = document.getElementById("image-upload");
   const uploadStatus = document.getElementById("upload-status");
 
-  // State handler
-  chrome.storage.sync.get(["fontEnabled", "spacingEnabled"], function (result) {
-    const fontEnabled = result.fontEnabled !== false;
-    const spacingEnabled = result.spacingEnabled || false;
+  const { fontEnabled, spacingEnabled } = await getSync([
+    "fontEnabled",
+    "spacingEnabled",
+  ]);
+  fontToggle.checked = fontEnabled !== false;
+  spacingToggle.checked = spacingEnabled || false;
 
-    fontToggle.checked = fontEnabled;
-    spacingToggle.checked = spacingEnabled;
-  });
-
-  // Font toggle handler
-  fontToggle.addEventListener("change", function () {
+  fontToggle.addEventListener("change", async function () {
     const enabled = this.checked;
-    chrome.storage.sync.set({ fontEnabled: enabled });
-
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      if (tabs[0]) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-          action: enabled ? "enableFont" : "disableFont",
-        });
-      }
-    });
+    await setSync({ fontEnabled: enabled });
+    sendToActiveTab({ action: enabled ? "enableFont" : "disableFont" });
   });
 
-  // Spacing toggle handler
-  spacingToggle.addEventListener("change", function () {
+  spacingToggle.addEventListener("change", async function () {
     const enabled = this.checked;
-    chrome.storage.sync.set({ spacingEnabled: enabled });
-
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      if (tabs[0]) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-          action: enabled ? "enableSpacing" : "disableSpacing",
-        });
-      }
-    });
+    await setSync({ spacingEnabled: enabled });
+    sendToActiveTab({ action: enabled ? "enableSpacing" : "disableSpacing" });
   });
 
-  // OCR image upload handler
   imageUpload.addEventListener("change", async function (e) {
     const file = e.target.files[0];
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      uploadStatus.textContent = "Error: Image must be under 5MB";
-      uploadStatus.className = "status-message error";
+      showStatus("Error: Image must be under 5MB", "error");
       return;
     }
 
-    uploadStatus.textContent = "Preparing image...";
-    uploadStatus.className = "status-message";
+    showStatus("Preparing image...", "");
 
     try {
       const dataUrl = await fileToDataURL(file);
-
-      await new Promise((resolve, reject) => {
-        chrome.storage.local.set({ ocrImage: dataUrl }, () => {
-          if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
-          else resolve();
-        });
-      });
+      await setLocal({ ocrImage: dataUrl });
 
       chrome.tabs.create({
         url: chrome.runtime.getURL("ocr/ocr-result.html"),
       });
 
-      uploadStatus.textContent = "Processing in new tab...";
-      uploadStatus.className = "status-message success";
+      showStatus("Processing in new tab...", "success");
     } catch (error) {
       console.error("OCR error:", error);
-      uploadStatus.textContent = `Error: ${error.message}`;
-      uploadStatus.className = "status-message error";
+      showStatus(`Error: ${error.message}`, "error");
     }
   });
+
+  function showStatus(text, type) {
+    uploadStatus.textContent = text;
+    uploadStatus.className = `status-message${type ? ` ${type}` : ""}`;
+  }
 });
 
 function fileToDataURL(file) {

@@ -1,4 +1,5 @@
 import Tesseract from "tesseract.js";
+import { getLocal, removeLocal } from "../shared/storage.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
   const loadingEl = document.getElementById("loading");
@@ -8,19 +9,14 @@ document.addEventListener("DOMContentLoaded", async function () {
   const ocrTextEl = document.getElementById("ocrText");
 
   try {
-    const { ocrImage } = await new Promise((resolve, reject) => {
-      chrome.storage.local.get(["ocrImage"], (result) => {
-        if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
-        else resolve(result);
-      });
-    });
+    const { ocrImage } = await getLocal(["ocrImage"]);
 
     if (!ocrImage) {
       showError("No image found. Please upload an image from the popup.");
       return;
     }
 
-    chrome.storage.local.remove("ocrImage");
+    await removeLocal("ocrImage");
 
     loadingEl.textContent = "Recognizing text...";
     progressContainer.style.display = "block";
