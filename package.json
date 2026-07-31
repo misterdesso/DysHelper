@@ -1,0 +1,19 @@
+{
+  "name": "dyshelper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chrome extension to make the web more accessible for dyslexic users",
+  "scripts": {
+    "lint": "eslint 'extension/**/*.js'",
+    "lint:fix": "eslint 'extension/**/*.js' --fix",
+    "format": "prettier --write 'extension/**/*.{js,css,html}'",
+    "format:check": "prettier --check 'extension/**/*.{js,css,html}'"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.8.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.8.0",
+    "prettier": "^3.9.6"
+  }
+}
