@@ -1,28 +1,19 @@
 <div align="center">
-  <img src="extension/icons/logo_500.png" alt="DysHelper Logo" width="150"/>
+  <img src="static/icons/logo_500.png" alt="DysHelper Logo" width="150"/>
   <h1>DysHelper</h1>
 </div>
 
-**DysHelper** is a lightweight yet impactful Chrome extension that brings accessibility to the web for everyone. Built with dyslexic users in mind, it transforms online content to make reading smoother and less overwhelming. Our goal goes beyond dyslexia — DysHelper is about creating a more inclusive internet where digital content is clearer, friendlier, and easier to navigate for all.
+**DysHelper** is a lightweight yet impactful Chrome extension that brings accessibility to the web for everyone. Built with dyslexic users in mind, it transforms online content to make reading smoother and less overwhelming. The goal goes beyond dyslexia; DysHelper is about creating a more inclusive internet where digital content is clearer, friendlier, and easier to navigate for all.
 
 ## Features
 
 - **OpenDyslexic Font Integration**: Instantly transforms any webpage text to use the dyslexia-friendly OpenDyslexic font
 - **Adjustable Letter Spacing**: Toggle increased letter and word spacing for improved readability
-- **Image-to-Text (OCR)**: Convert text from images into dyslexia-friendly readable format
+- **Image-to-Text (OCR)**: Convert text from images into dyslexia-friendly readable format (runs locally via Tesseract.js)
 - **Clean Interface**: Simple, easy-to-use popup controls
 - **Cross-Platform**: Works on any Chromium-based browser (Chrome, Edge, Brave, etc.)
 
 ## Installation
-
-### Users
-1. Navigate to our [latest release](https://github.com/misterdesso/DysHelper/releases/latest) and download the `extension.crx` file
-
-2. Open Chrome, click on the 3-dot menu in the top right corner and go to Extensions > Manage Extensions
-
-3. Enable "Developer mode" in the top right corner
-
-4. Drag and drop the `extension.crx` file into the page
 
 ### Developers
 1. Clone the repository:
@@ -30,30 +21,29 @@
 git clone https://github.com/misterdesso/DysHelper.git
 ```
 
-2. Open Chrome and navigate to `chrome://extensions/`
+2. Install dependencies and build:
+```bash
+npm install
+npm run build
+```
 
-3. Enable "Developer mode" in the top right corner
+3. Open Chrome and navigate to `chrome://extensions/`
 
-4. Click "Load unpacked" and select the `extension` folder from the cloned repository
+4. Enable "Developer mode" in the top right corner
 
-## Dependencies
+5. Click "Load unpacked" and select the `dist` folder from the cloned repository
 
-### Chrome Extension
-- OpenDyslexic font (included)
-- Chrome Extensions API (v3)
+## Development
 
-### OCR Server
-- Node.js (v14 or higher)
-- Express.js
-- Tesseract.js
-- Additional npm packages:
-  - cors
-  - helmet
-  - morgan
-  - multer
-  - uuid
+```bash
+npm install          # install dependencies
+npm run build        # one-shot production build to dist/
+npm run dev          # watch mode (rebuilds on file changes)
+npm run lint         # run ESLint
+npm run format       # run Prettier
+```
 
-The OCR functionality is provided through our hosted service at `dyshelper.onrender.com`, eliminating the need for local server setup.
+Edit source files in `src/`, static assets in `static/`. The build outputs to `dist/` which is what Chrome loads.
 
 ## Usage
 
@@ -61,15 +51,16 @@ The OCR functionality is provided through our hosted service at `dyshelper.onren
 2. Toggle the OpenDyslexic font and/or letter spacing as needed
 3. To convert image to text:
    - Click "Upload Screenshot"
-   - Select an image containing text
-   - Wait for processing
+   - Select an image containing text (max 5MB)
+   - View the progress bar as OCR processes locally
    - View the converted text in a new tab with dyslexia-friendly formatting
 
 ## Configuration
 
-### OCR Service
-- Max file size: 8MB
-- Supported formats: JPEG, PNG, WEBP, HEIC
+### OCR
+- Max file size: 5MB
+- Supported formats: JPEG, PNG, WEBP
+- Runs entirely client-side (first use downloads ~4MB language data)
 
 ### Extension
 - Font options: Regular, Bold, Italic, Bold Italic
