@@ -1,18 +1,36 @@
 import { getSync } from "../shared/storage.js";
+import { migrateSettings } from "../shared/defaults.js";
 import { injectFontFaces } from "./font-loader.js";
-import { enableFont, disableFont, enableSpacing, disableSpacing } from "./toggles.js";
+import {
+  applySettings,
+  enableFont,
+  disableFont,
+  enableSpacing,
+  disableSpacing,
+} from "./toggles.js";
 
 injectFontFaces();
 
-getSync(["fontEnabled", "spacingEnabled"]).then((result) => {
-  if (result.fontEnabled !== false) enableFont();
-  if (result.spacingEnabled) enableSpacing();
+getSync([
+  "fontEnabled",
+  "spacingEnabled",
+  "fontFamily",
+  "fontSize",
+  "letterSpacing",
+  "wordSpacing",
+]).then((raw) => {
+  const settings = migrateSettings(raw);
+  applySettings(settings);
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  const actions = { enableFont, disableFont, enableSpacing, disableSpacing };
-  const handler = actions[message.action];
-  if (handler) handler();
+  if (message.action === "applySettings" && message.settings) {
+    applySettings(message.settings);
+  } else {
+    const actions = { enableFont, disableFont, enableSpacing, disableSpacing };
+    const handler = actions[message.action];
+    if (handler) handler();
+  }
   sendResponse({ success: true });
   return true;
 });
