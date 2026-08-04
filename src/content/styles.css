@@ -1,62 +1,66 @@
-html.opendyslexic-enabled {
-  font-family: "OpenDyslexic", sans-serif !important;
+html.dys-font-enabled {
+  font-family: var(--dys-font-family, "OpenDyslexic"), sans-serif !important;
 }
 
-html.opendyslexic-enabled body,
-html.opendyslexic-enabled div,
-html.opendyslexic-enabled span,
-html.opendyslexic-enabled p,
-html.opendyslexic-enabled a,
-html.opendyslexic-enabled li,
-html.opendyslexic-enabled td,
-html.opendyslexic-enabled th,
-html.opendyslexic-enabled h1,
-html.opendyslexic-enabled h2,
-html.opendyslexic-enabled h3,
-html.opendyslexic-enabled h4,
-html.opendyslexic-enabled h5,
-html.opendyslexic-enabled h6,
-html.opendyslexic-enabled label,
-html.opendyslexic-enabled input,
-html.opendyslexic-enabled button,
-html.opendyslexic-enabled select,
-html.opendyslexic-enabled textarea,
-html.opendyslexic-enabled pre,
-html.opendyslexic-enabled code,
-html.opendyslexic-enabled kbd,
-html.opendyslexic-enabled samp,
-html.opendyslexic-enabled blockquote,
-html.opendyslexic-enabled figcaption,
-html.opendyslexic-enabled article,
-html.opendyslexic-enabled section,
-html.opendyslexic-enabled nav,
-html.opendyslexic-enabled header,
-html.opendyslexic-enabled footer,
-html.opendyslexic-enabled main,
-html.opendyslexic-enabled aside {
+html.dys-font-enabled body,
+html.dys-font-enabled div,
+html.dys-font-enabled span,
+html.dys-font-enabled p,
+html.dys-font-enabled a,
+html.dys-font-enabled li,
+html.dys-font-enabled td,
+html.dys-font-enabled th,
+html.dys-font-enabled h1,
+html.dys-font-enabled h2,
+html.dys-font-enabled h3,
+html.dys-font-enabled h4,
+html.dys-font-enabled h5,
+html.dys-font-enabled h6,
+html.dys-font-enabled label,
+html.dys-font-enabled input,
+html.dys-font-enabled button,
+html.dys-font-enabled select,
+html.dys-font-enabled textarea,
+html.dys-font-enabled pre,
+html.dys-font-enabled code,
+html.dys-font-enabled kbd,
+html.dys-font-enabled samp,
+html.dys-font-enabled blockquote,
+html.dys-font-enabled figcaption,
+html.dys-font-enabled article,
+html.dys-font-enabled section,
+html.dys-font-enabled nav,
+html.dys-font-enabled header,
+html.dys-font-enabled footer,
+html.dys-font-enabled main,
+html.dys-font-enabled aside {
   font-family: inherit !important;
 }
 
-html.letter-spacing-enabled {
-  letter-spacing: 0.15em !important;
-  word-spacing: 0.25em !important;
+html.dys-font-size-enabled {
+  font-size: calc(var(--dys-font-size, 1) * 100%) !important;
 }
 
-html.letter-spacing-enabled div,
-html.letter-spacing-enabled span,
-html.letter-spacing-enabled p,
-html.letter-spacing-enabled a,
-html.letter-spacing-enabled li,
-html.letter-spacing-enabled h1,
-html.letter-spacing-enabled h2,
-html.letter-spacing-enabled h3,
-html.letter-spacing-enabled h4,
-html.letter-spacing-enabled h5,
-html.letter-spacing-enabled h6,
-html.letter-spacing-enabled input,
-html.letter-spacing-enabled button,
-html.letter-spacing-enabled select,
-html.letter-spacing-enabled textarea {
+html.dys-spacing-enabled {
+  letter-spacing: var(--dys-letter-spacing, 0.15em) !important;
+  word-spacing: var(--dys-word-spacing, 0.25em) !important;
+}
+
+html.dys-spacing-enabled div,
+html.dys-spacing-enabled span,
+html.dys-spacing-enabled p,
+html.dys-spacing-enabled a,
+html.dys-spacing-enabled li,
+html.dys-spacing-enabled h1,
+html.dys-spacing-enabled h2,
+html.dys-spacing-enabled h3,
+html.dys-spacing-enabled h4,
+html.dys-spacing-enabled h5,
+html.dys-spacing-enabled h6,
+html.dys-spacing-enabled input,
+html.dys-spacing-enabled button,
+html.dys-spacing-enabled select,
+html.dys-spacing-enabled textarea {
   letter-spacing: inherit !important;
   word-spacing: inherit !important;
 }

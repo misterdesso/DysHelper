@@ -12,32 +12,40 @@ describe("content toggles", () => {
   });
 
   describe("enableFont", () => {
-    it("adds opendyslexic-enabled class to html", () => {
+    it("adds dys-font-enabled class to html", () => {
       enableFont();
-      expect(document.documentElement.classList.contains("opendyslexic-enabled")).toBe(true);
+      expect(
+        document.documentElement.classList.contains("dys-font-enabled"),
+      ).toBe(true);
     });
   });
 
   describe("disableFont", () => {
-    it("removes opendyslexic-enabled class from html", () => {
-      document.documentElement.classList.add("opendyslexic-enabled");
+    it("removes dys-font-enabled class from html", () => {
+      document.documentElement.classList.add("dys-font-enabled");
       disableFont();
-      expect(document.documentElement.classList.contains("opendyslexic-enabled")).toBe(false);
+      expect(
+        document.documentElement.classList.contains("dys-font-enabled"),
+      ).toBe(false);
     });
   });
 
   describe("enableSpacing", () => {
-    it("adds letter-spacing-enabled class to html", () => {
+    it("adds dys-spacing-enabled class to html", () => {
       enableSpacing();
-      expect(document.documentElement.classList.contains("letter-spacing-enabled")).toBe(true);
+      expect(
+        document.documentElement.classList.contains("dys-spacing-enabled"),
+      ).toBe(true);
     });
   });
 
   describe("disableSpacing", () => {
-    it("removes letter-spacing-enabled class from html", () => {
-      document.documentElement.classList.add("letter-spacing-enabled");
+    it("removes dys-spacing-enabled class from html", () => {
+      document.documentElement.classList.add("dys-spacing-enabled");
       disableSpacing();
-      expect(document.documentElement.classList.contains("letter-spacing-enabled")).toBe(false);
+      expect(
+        document.documentElement.classList.contains("dys-spacing-enabled"),
+      ).toBe(false);
     });
   });
 });

@@ -1,5 +1,5 @@
-const FONT_CLASS = "opendyslexic-enabled";
-const SPACING_CLASS = "letter-spacing-enabled";
+const FONT_CLASS = "dys-font-enabled";
+const SPACING_CLASS = "dys-spacing-enabled";
 
 export function enableFont() {
   document.documentElement.classList.add(FONT_CLASS);
