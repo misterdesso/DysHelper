@@ -10,23 +10,76 @@
         <img src="../icons/logo_500.png" alt="DysHelper Logo" class="logo" />
         <h1>DysHelper</h1>
       </div>
-      <div class="toggle-container">
-        <span class="option-text">OpenDyslexic Font</span>
-        <label class="switch">
-          <input type="checkbox" id="font-toggle" />
-          <span class="slider round"></span>
-        </label>
+
+      <div class="section">
+        <label class="section-label" for="font-family-select"
+          >Font Family</label
+        >
+        <select id="font-family-select" class="font-select">
+          <option value="none">Default (disabled)</option>
+          <option value="opendyslexic">OpenDyslexic</option>
+          <option value="opendyslexic-alta">OpenDyslexic Alta</option>
+          <option value="opendyslexic-mono">OpenDyslexic Mono</option>
+        </select>
       </div>
-      <div class="toggle-container">
-        <span class="option-text">Letter Spacing</span>
-        <label class="switch">
-          <input type="checkbox" id="spacing-toggle" />
-          <span class="slider round"></span>
-        </label>
+
+      <div class="section">
+        <div class="slider-header">
+          <label class="section-label" for="font-size-slider">Font Size</label>
+          <span class="slider-value" id="font-size-value">1.0x</span>
+        </div>
+        <input
+          type="range"
+          id="font-size-slider"
+          class="range-slider"
+          min="0.8"
+          max="2.0"
+          step="0.1"
+          value="1.0"
+        />
       </div>
+
+      <div class="section">
+        <div class="slider-header">
+          <label class="section-label" for="letter-spacing-slider"
+            >Letter Spacing</label
+          >
+          <span class="slider-value" id="letter-spacing-value">0.00em</span>
+        </div>
+        <input
+          type="range"
+          id="letter-spacing-slider"
+          class="range-slider"
+          min="0"
+          max="0.3"
+          step="0.01"
+          value="0"
+        />
+      </div>
+
+      <div class="section">
+        <div class="slider-header">
+          <label class="section-label" for="word-spacing-slider"
+            >Word Spacing</label
+          >
+          <span class="slider-value" id="word-spacing-value">0.00em</span>
+        </div>
+        <input
+          type="range"
+          id="word-spacing-slider"
+          class="range-slider"
+          min="0"
+          max="0.5"
+          step="0.01"
+          value="0"
+        />
+      </div>
+
+      <button id="reset-button" class="reset-button">Reset to Defaults</button>
+
       <div class="upload-section">
         <label for="image-upload" class="upload-button">
-          Upload Screenshot
+          Upload Screenshot (OCR)
           <input type="file" id="image-upload" accept="image/*" />
         </label>
         <div id="upload-status" class="status-message"></div>
