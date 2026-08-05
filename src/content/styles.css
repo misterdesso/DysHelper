@@ -38,7 +38,7 @@ html.dys-font-enabled aside {
 }
 
 html.dys-font-size-enabled {
-  font-size: calc(var(--dys-font-size, 1) * 100%) !important;
+  zoom: var(--dys-font-size, 1) !important;
 }
 
 html.dys-spacing-enabled {
