@@ -1,5 +1,12 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { getSync, setSync, getLocal, setLocal, removeLocal } from "../src/shared/storage.js";
+import {
+  getSync,
+  setSync,
+  removeSync,
+  getLocal,
+  setLocal,
+  removeLocal,
+} from "../src/shared/storage.js";
 
 describe("storage helpers", () => {
   beforeEach(() => {
@@ -25,6 +32,14 @@ describe("storage helpers", () => {
     it("stores values", async () => {
       await setSync({ spacingEnabled: true });
       expect(chrome.storage.sync._store.spacingEnabled).toBe(true);
+    });
+  });
+
+  describe("removeSync", () => {
+    it("removes stored values", async () => {
+      chrome.storage.sync._reset({ "site:example.com": { fontSize: 1.2 } });
+      await removeSync("site:example.com");
+      expect(chrome.storage.sync._store["site:example.com"]).toBeUndefined();
     });
   });
 

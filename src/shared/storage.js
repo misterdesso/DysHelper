@@ -16,6 +16,15 @@ export function setSync(items) {
   });
 }
 
+export function removeSync(keys) {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.remove(keys, () => {
+      if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
+      else resolve();
+    });
+  });
+}
+
 export function getLocal(keys) {
   return new Promise((resolve, reject) => {
     chrome.storage.local.get(keys, (result) => {
