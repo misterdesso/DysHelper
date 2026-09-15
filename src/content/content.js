@@ -1,19 +1,13 @@
-import { getSync } from "../shared/storage.js";
-import { migrateSettings } from "../shared/defaults.js";
+import { getBaseDomain } from "../shared/domain.js";
+import { resolveSettings } from "../shared/site-settings.js";
 import { injectFontFaces } from "./font-loader.js";
 import { applySettings } from "./toggles.js";
 
 injectFontFaces();
 
-getSync([
-  "fontFamily",
-  "fontSize",
-  "letterSpacing",
-  "wordSpacing",
-  "fontEnabled",
-  "spacingEnabled",
-]).then((raw) => {
-  const settings = migrateSettings(raw);
+const domain = getBaseDomain(location.hostname);
+
+resolveSettings(domain).then((settings) => {
   applySettings(settings);
 });
 
