@@ -1,5 +1,5 @@
 import { setLocal } from "../shared/storage.js";
-import { sendToActiveTab, getActiveTab } from "../shared/messaging.js";
+import { getActiveTab } from "../shared/messaging.js";
 import { DEFAULTS } from "../shared/defaults.js";
 import { getBaseDomain } from "../shared/domain.js";
 import {
@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const wordSpacingSlider = document.getElementById("word-spacing-slider");
   const wordSpacingValue = document.getElementById("word-spacing-value");
   const resetButton = document.getElementById("reset-button");
+  const saveButton = document.getElementById("save-button");
   const scopeSiteLabel = document.getElementById("scope-site-label");
   const scopeSiteButton = document.getElementById("scope-site-button");
   const scopeGlobalButton = document.getElementById("scope-global-button");
@@ -29,14 +30,21 @@ document.addEventListener("DOMContentLoaded", async function () {
   const tab = await getActiveTab();
   const domain = domainFromTab(tab);
 
-  // Load both scopes. The site working copy is seeded from the global default
-  // when no override exists, so untouched fields are preserved on first edit.
-  const globalSettings = await getGlobalSettings();
-  const siteOverride = domain ? await getSiteSettings(domain) : null;
-  let hasSiteOverride = Boolean(siteOverride);
-  const siteSettings = siteOverride
-    ? { ...siteOverride }
-    : { ...globalSettings };
+  // Live previews stream to the content script over a port. When the popup
+  // closes the port disconnects and the content script reverts to saved
+  // settings, so an unsaved preview never lingers on the page.
+  const previewPort =
+    tab && domain ? chrome.tabs.connect(tab.id, { name: "dys-preview" }) : null;
+
+  // Saved baselines (what is currently persisted).
+  let globalSaved = await getGlobalSettings();
+  let siteSaved = domain ? await getSiteSettings(domain) : null;
+  let hasSiteOverrideSaved = Boolean(siteSaved);
+
+  // Working copies (what the controls show and what the page previews).
+  // The site copy is seeded from the global default when no override exists.
+  const globalWorking = { ...globalSaved };
+  const siteWorking = siteSaved ? { ...siteSaved } : { ...globalSaved };
 
   // Per-site is the default scope; restricted pages fall back to global only.
   let scope = domain ? "site" : "global";
@@ -49,18 +57,30 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   applyScopeUI();
-  populateControls(activeSettings());
+  populateControls(working());
+  refreshSaveButton();
 
-  let saveTimeout = null;
-
-  function activeSettings() {
-    return scope === "site" ? siteSettings : globalSettings;
+  function working() {
+    return scope === "site" ? siteWorking : globalWorking;
   }
 
-  // What the current site actually renders: its override if one exists,
-  // otherwise the global default.
-  function resolvedForCurrentSite() {
-    return hasSiteOverride ? siteSettings : globalSettings;
+  // The committed baseline for the current scope — what a save would compare
+  // against. In site scope with no saved override, that baseline is global.
+  function savedBaseline() {
+    if (scope === "site") return siteSaved ?? globalSaved;
+    return globalSaved;
+  }
+
+  // What the current site actually renders in preview: the site working copy
+  // when editing the site, otherwise its saved override (if any) or the
+  // working global default.
+  function previewSettings() {
+    if (scope === "site") return siteWorking;
+    return hasSiteOverrideSaved ? siteSaved : globalWorking;
+  }
+
+  function isDirty() {
+    return !settingsEqual(working(), savedBaseline());
   }
 
   function applyScopeUI() {
@@ -70,80 +90,99 @@ document.addEventListener("DOMContentLoaded", async function () {
     resetButton.textContent = isSite ? "Reset This Site" : "Reset to Defaults";
   }
 
-  function saveAndApply(updates) {
-    Object.assign(activeSettings(), updates);
-    if (scope === "site") hasSiteOverride = true;
+  function refreshSaveButton() {
+    saveButton.disabled = !isDirty();
+  }
 
-    sendToActiveTab({
-      action: "applySettings",
-      settings: { ...resolvedForCurrentSite() },
-    });
+  // Live preview to the page + refresh the Save button. Never writes storage.
+  function previewAndRefresh() {
+    if (previewPort) {
+      previewPort.postMessage({ settings: { ...previewSettings() } });
+    }
+    refreshSaveButton();
+  }
 
-    clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(() => {
-      if (scope === "site" && domain) {
-        setSiteSettings(domain, siteSettings);
-      } else {
-        setGlobalSettings(globalSettings);
-      }
-    }, 300);
+  function switchScope(target) {
+    if (scope === target) return;
+    // Discard unsaved changes in the scope we are leaving.
+    if (scope === "site") {
+      Object.assign(siteWorking, siteSaved ?? globalSaved);
+    } else {
+      Object.assign(globalWorking, globalSaved);
+    }
+    scope = target;
+    // Load the target scope's saved baseline into its working copy.
+    if (target === "site") {
+      Object.assign(siteWorking, siteSaved ?? globalSaved);
+    } else {
+      Object.assign(globalWorking, globalSaved);
+    }
+    applyScopeUI();
+    populateControls(working());
+    previewAndRefresh();
   }
 
   scopeSiteButton.addEventListener("click", () => {
-    if (scope === "site" || scopeSiteButton.disabled) return;
-    scope = "site";
-    applyScopeUI();
-    populateControls(siteSettings);
+    if (!scopeSiteButton.disabled) switchScope("site");
   });
 
-  scopeGlobalButton.addEventListener("click", () => {
-    if (scope === "global") return;
-    scope = "global";
-    applyScopeUI();
-    populateControls(globalSettings);
-  });
+  scopeGlobalButton.addEventListener("click", () => switchScope("global"));
 
   fontFamilySelect.addEventListener("change", () => {
-    saveAndApply({ fontFamily: fontFamilySelect.value });
+    working().fontFamily = fontFamilySelect.value;
+    previewAndRefresh();
   });
 
   fontSizeSlider.addEventListener("input", () => {
     const val = parseFloat(fontSizeSlider.value);
     fontSizeValue.textContent = `${val.toFixed(1)}x`;
-    saveAndApply({ fontSize: val });
+    working().fontSize = val;
+    previewAndRefresh();
   });
 
   letterSpacingSlider.addEventListener("input", () => {
     const val = parseFloat(letterSpacingSlider.value);
     letterSpacingValue.textContent = `${val.toFixed(2)}em`;
-    saveAndApply({ letterSpacing: val });
+    working().letterSpacing = val;
+    previewAndRefresh();
   });
 
   wordSpacingSlider.addEventListener("input", () => {
     const val = parseFloat(wordSpacingSlider.value);
     wordSpacingValue.textContent = `${val.toFixed(2)}em`;
-    saveAndApply({ wordSpacing: val });
+    working().wordSpacing = val;
+    previewAndRefresh();
   });
 
+  // Reset is staged: it previews the reset and enables Save, but only commits
+  // when the user saves.
   resetButton.addEventListener("click", () => {
-    clearTimeout(saveTimeout);
-
     if (scope === "site" && domain) {
-      // Remove the override so the site falls back to the global default.
-      hasSiteOverride = false;
-      Object.assign(siteSettings, globalSettings);
-      removeSiteSettings(domain);
-      populateControls(siteSettings);
+      Object.assign(siteWorking, globalSaved);
     } else {
-      Object.assign(globalSettings, DEFAULTS);
-      setGlobalSettings(globalSettings);
-      populateControls(globalSettings);
+      Object.assign(globalWorking, DEFAULTS);
     }
+    populateControls(working());
+    previewAndRefresh();
+  });
 
-    sendToActiveTab({
-      action: "applySettings",
-      settings: { ...resolvedForCurrentSite() },
-    });
+  saveButton.addEventListener("click", async () => {
+    if (scope === "site" && domain) {
+      if (settingsEqual(siteWorking, globalSaved)) {
+        // Working copy matches the global default — drop the override.
+        await removeSiteSettings(domain);
+        hasSiteOverrideSaved = false;
+        siteSaved = null;
+      } else {
+        await setSiteSettings(domain, siteWorking);
+        hasSiteOverrideSaved = true;
+        siteSaved = { ...siteWorking };
+      }
+    } else {
+      await setGlobalSettings(globalWorking);
+      globalSaved = { ...globalWorking };
+    }
+    refreshSaveButton();
   });
 
   imageUpload.addEventListener("change", async function (e) {
@@ -187,6 +226,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     uploadStatus.className = `status-message${type ? ` ${type}` : ""}`;
   }
 });
+
+function settingsEqual(a, b) {
+  return (
+    a.fontFamily === b.fontFamily &&
+    a.fontSize === b.fontSize &&
+    a.letterSpacing === b.letterSpacing &&
+    a.wordSpacing === b.wordSpacing
+  );
+}
 
 function domainFromTab(tab) {
   if (!tab || !tab.url) return null;
