@@ -11,6 +11,28 @@
         <h1>DysHelper</h1>
       </div>
 
+      <div class="scope-bar">
+        <span class="scope-site" id="scope-site-label">this site</span>
+        <div class="scope-toggle" role="group" aria-label="Settings scope">
+          <button
+            type="button"
+            class="scope-option is-active"
+            id="scope-site-button"
+            data-scope="site"
+          >
+            This Site
+          </button>
+          <button
+            type="button"
+            class="scope-option"
+            id="scope-global-button"
+            data-scope="global"
+          >
+            All Sites
+          </button>
+        </div>
+      </div>
+
       <div class="section">
         <label class="section-label" for="font-family-select"
           >Font Family</label
@@ -75,7 +97,7 @@
         />
       </div>
 
-      <button id="reset-button" class="reset-button">Reset to Defaults</button>
+      <button id="reset-button" class="reset-button">Reset This Site</button>
 
       <div class="upload-section">
         <label for="image-upload" class="upload-button">

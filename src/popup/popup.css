@@ -29,6 +29,59 @@ h1 {
   font-size: 18px;
 }
 
+.scope-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.scope-site {
+  font-size: 12px;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.scope-toggle {
+  display: inline-flex;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.scope-option {
+  padding: 5px 10px;
+  border: none;
+  background: #f5f5f5;
+  color: #666;
+  font-size: 12px;
+  font-family: "OpenDyslexic", sans-serif;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.scope-option + .scope-option {
+  border-left: 1px solid #ddd;
+}
+
+.scope-option.is-active {
+  background: #2196f3;
+  color: white;
+}
+
+.scope-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .section {
   margin: 14px 0;
 }
