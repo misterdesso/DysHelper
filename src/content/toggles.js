@@ -41,4 +41,3 @@ export function applySettings(settings) {
     root.style.removeProperty("--dys-word-spacing");
   }
 }
-

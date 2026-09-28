@@ -2,7 +2,6 @@
 .DS_Store
 /.DS_Store
 **/.DS_Store
-*.pem
 
 # IDE
 .claude/
@@ -14,6 +13,7 @@ node_modules/
 
 # Build output
 dist/
+dyshelper.zip
 
 # Environment variables
 .env
@@ -21,4 +21,4 @@ dist/
 .env.*.local
 
 # Extension key files
-extension.pem
+*.pem
