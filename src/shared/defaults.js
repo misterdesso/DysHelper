@@ -3,6 +3,7 @@ export const DEFAULTS = {
   fontSize: 1.0,
   letterSpacing: 0,
   wordSpacing: 0,
+  rulerEnabled: false,
 };
 
 // Single source of truth for which keys make up a settings object.

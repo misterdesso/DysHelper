@@ -2,13 +2,19 @@ import { getBaseDomain } from "../shared/domain.js";
 import { resolveSettings } from "../shared/site-settings.js";
 import { injectFontFaces } from "./font-loader.js";
 import { applySettings } from "./toggles.js";
+import { updateRuler } from "./ruler.js";
 
 injectFontFaces();
 
 const domain = getBaseDomain(location.hostname);
 
+function apply(settings) {
+  applySettings(settings);
+  updateRuler(settings);
+}
+
 function applySaved() {
-  return resolveSettings(domain).then(applySettings);
+  return resolveSettings(domain).then(apply);
 }
 
 applySaved();
@@ -22,7 +28,7 @@ chrome.runtime.onConnect.addListener((port) => {
 
   port.onMessage.addListener((message) => {
     if (message && message.settings) {
-      applySettings(message.settings);
+      apply(message.settings);
     }
   });
 

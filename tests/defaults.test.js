@@ -12,6 +12,7 @@ describe("DEFAULTS", () => {
       fontSize: 1.0,
       letterSpacing: 0,
       wordSpacing: 0,
+      rulerEnabled: false,
     });
   });
 });
@@ -60,6 +61,7 @@ describe("migrateSettings", () => {
       fontSize: 1.5,
       letterSpacing: 0.2,
       wordSpacing: 0.3,
+      rulerEnabled: true,
     };
     expect(migrateSettings(input)).toEqual(input);
   });

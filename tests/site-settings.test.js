@@ -27,6 +27,7 @@ describe("site-settings", () => {
         fontSize: 1.4,
         letterSpacing: 0.1,
         wordSpacing: 0.2,
+        rulerEnabled: true,
       });
       const result = await getGlobalSettings();
       expect(result).toEqual({
@@ -34,6 +35,7 @@ describe("site-settings", () => {
         fontSize: 1.4,
         letterSpacing: 0.1,
         wordSpacing: 0.2,
+        rulerEnabled: true,
       });
     });
 
