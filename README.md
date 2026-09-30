@@ -72,3 +72,7 @@ Edit source files in `src/`, and static assets in `static/`. The build outputs t
 - Supported formats: JPEG, PNG, WEBP
 - Runs client-side via Tesseract.js (WASM)
 - First use downloads the English language model (needs an internet connection) and may take a few extra seconds to initialise
+
+## License
+
+Released under [MIT](LICENSE).
