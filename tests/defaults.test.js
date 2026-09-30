@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { DEFAULTS, migrateSettings } from "../src/shared/defaults.js";
+import {
+  DEFAULTS,
+  SETTING_KEYS,
+  migrateSettings,
+} from "../src/shared/defaults.js";
 
 describe("DEFAULTS", () => {
   it("has expected default values", () => {
@@ -76,5 +80,21 @@ describe("migrateSettings", () => {
     });
     expect(result.letterSpacing).toBe(0.1);
     expect(result.wordSpacing).toBe(0.4);
+  });
+
+  it("passes through wordSpacing even without letterSpacing", () => {
+    const result = migrateSettings({ wordSpacing: 0.3 });
+    expect(result.wordSpacing).toBe(0.3);
+  });
+
+  it("ignores unknown keys", () => {
+    const result = migrateSettings({ stray: true });
+    expect(result).not.toHaveProperty("stray");
+  });
+});
+
+describe("SETTING_KEYS", () => {
+  it("lists exactly the DEFAULTS keys", () => {
+    expect(SETTING_KEYS).toEqual(Object.keys(DEFAULTS));
   });
 });

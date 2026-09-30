@@ -5,30 +5,24 @@ export const DEFAULTS = {
   wordSpacing: 0,
 };
 
+// Single source of truth for which keys make up a settings object.
+export const SETTING_KEYS = Object.keys(DEFAULTS);
+
 export function migrateSettings(raw) {
   const settings = { ...DEFAULTS };
 
-  if ("fontFamily" in raw) {
-    settings.fontFamily = raw.fontFamily;
-  } else if ("fontEnabled" in raw) {
+  for (const key of SETTING_KEYS) {
+    if (raw[key] !== undefined) settings[key] = raw[key];
+  }
+
+  // Legacy booleans only apply when the newer keys are absent.
+  if (raw.fontFamily === undefined && "fontEnabled" in raw) {
     settings.fontFamily = raw.fontEnabled !== false ? "opendyslexic" : "none";
   }
 
-  if ("letterSpacing" in raw) {
-    settings.letterSpacing = raw.letterSpacing;
-    settings.wordSpacing = raw.wordSpacing ?? DEFAULTS.wordSpacing;
-  } else if ("spacingEnabled" in raw) {
-    if (raw.spacingEnabled) {
-      settings.letterSpacing = 0.15;
-      settings.wordSpacing = 0.25;
-    } else {
-      settings.letterSpacing = 0;
-      settings.wordSpacing = 0;
-    }
-  }
-
-  if ("fontSize" in raw) {
-    settings.fontSize = raw.fontSize;
+  if (raw.letterSpacing === undefined && "spacingEnabled" in raw) {
+    settings.letterSpacing = raw.spacingEnabled ? 0.15 : 0;
+    settings.wordSpacing = raw.spacingEnabled ? 0.25 : 0;
   }
 
   return settings;

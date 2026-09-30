@@ -1,6 +1,6 @@
 import { setLocal } from "../shared/storage.js";
 import { getActiveTab } from "../shared/messaging.js";
-import { DEFAULTS } from "../shared/defaults.js";
+import { DEFAULTS, SETTING_KEYS } from "../shared/defaults.js";
 import { getBaseDomain } from "../shared/domain.js";
 import {
   getGlobalSettings,
@@ -8,6 +8,7 @@ import {
   getSiteSettings,
   setSiteSettings,
   removeSiteSettings,
+  normalizeSiteSettings,
 } from "../shared/site-settings.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -38,7 +39,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Saved baselines (what is currently persisted).
   let globalSaved = await getGlobalSettings();
-  let siteSaved = domain ? await getSiteSettings(domain) : null;
+  let siteSaved = domain
+    ? normalizeSiteSettings(await getSiteSettings(domain), globalSaved)
+    : null;
   let hasSiteOverrideSaved = Boolean(siteSaved);
 
   // Working copies (what the controls show and what the page previews).
@@ -228,12 +231,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 function settingsEqual(a, b) {
-  return (
-    a.fontFamily === b.fontFamily &&
-    a.fontSize === b.fontSize &&
-    a.letterSpacing === b.letterSpacing &&
-    a.wordSpacing === b.wordSpacing
-  );
+  return SETTING_KEYS.every((key) => a[key] === b[key]);
 }
 
 function domainFromTab(tab) {

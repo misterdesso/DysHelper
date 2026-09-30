@@ -6,6 +6,7 @@ import {
   setSiteSettings,
   removeSiteSettings,
   resolveSettings,
+  normalizeSiteSettings,
 } from "../src/shared/site-settings.js";
 import { DEFAULTS } from "../src/shared/defaults.js";
 
@@ -106,9 +107,7 @@ describe("site-settings", () => {
       expect(chrome.storage.sync._store["site:a.com"].fontFamily).toBe(
         "opendyslexic",
       );
-      expect(chrome.storage.sync._store["site:b.com"].fontFamily).toBe(
-        "none",
-      );
+      expect(chrome.storage.sync._store["site:b.com"].fontFamily).toBe("none");
     });
   });
 
@@ -116,9 +115,7 @@ describe("site-settings", () => {
     it("removes the override for a domain", async () => {
       await setSiteSettings("example.com", { fontFamily: "opendyslexic" });
       await removeSiteSettings("example.com");
-      expect(
-        chrome.storage.sync._store["site:example.com"],
-      ).toBeUndefined();
+      expect(chrome.storage.sync._store["site:example.com"]).toBeUndefined();
     });
 
     it("does not affect other domains", async () => {
@@ -156,6 +153,67 @@ describe("site-settings", () => {
       chrome.storage.sync._reset({ fontFamily: "opendyslexic-alta" });
       const result = await resolveSettings(null);
       expect(result.fontFamily).toBe("opendyslexic-alta");
+    });
+
+    it("fills keys missing from an older site override from global", async () => {
+      chrome.storage.sync._reset({
+        fontSize: 1.4,
+        "site:example.com": {
+          fontFamily: "opendyslexic-mono",
+          letterSpacing: 0,
+          wordSpacing: 0,
+        },
+      });
+      const result = await resolveSettings("example.com");
+      expect(result.fontFamily).toBe("opendyslexic-mono");
+      expect(result.fontSize).toBe(1.4);
+    });
+  });
+
+  describe("normalizeSiteSettings", () => {
+    const global = {
+      fontFamily: "opendyslexic",
+      fontSize: 1.2,
+      letterSpacing: 0.1,
+      wordSpacing: 0.2,
+    };
+
+    it("returns null when there is no override", () => {
+      expect(normalizeSiteSettings(null, global)).toBeNull();
+    });
+
+    it("keeps the override's own values", () => {
+      const site = {
+        fontFamily: "none",
+        fontSize: 1.8,
+        letterSpacing: 0,
+        wordSpacing: 0,
+      };
+      expect(normalizeSiteSettings(site, global)).toEqual(site);
+    });
+
+    it("fills missing keys from global", () => {
+      const result = normalizeSiteSettings({ fontFamily: "none" }, global);
+      expect(result).toEqual({ ...global, fontFamily: "none" });
+    });
+
+    it("drops unknown keys", () => {
+      const result = normalizeSiteSettings({ stray: true }, global);
+      expect(result).not.toHaveProperty("stray");
+    });
+  });
+
+  describe("setters only persist known keys", () => {
+    it("setGlobalSettings ignores unknown fields", async () => {
+      await setGlobalSettings({ ...DEFAULTS, stray: true });
+      expect(chrome.storage.sync._store).not.toHaveProperty("stray");
+    });
+
+    it("setSiteSettings ignores unknown fields", async () => {
+      await setSiteSettings("example.com", { ...DEFAULTS, stray: true });
+      expect(chrome.storage.sync._store["site:example.com"]).not.toHaveProperty(
+        "stray",
+      );
     });
   });
 });
