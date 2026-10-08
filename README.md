@@ -9,6 +9,7 @@
 
 - **Dyslexia-friendly fonts**: Apply OpenDyslexic (or the Alta and Mono variants) to any webpage
 - **Adjustable typography**: Tune font size and letter/word spacing with sliders
+- **Reading ruler**: A highlight band that follows your cursor to help you keep your place on a line
 - **Per-site memory**: Save different settings for different sites, or adjust the global default
 - **Image-to-text (OCR)**: Convert text from images into dyslexia-friendly readable format (runs client-side via Tesseract.js)
 - **Clean interface**: Simple, easy-to-use popup controls
@@ -51,7 +52,7 @@ Edit source files in `src/`, and static assets in `static/`. The build outputs t
 ## Usage
 
 1. Open DysHelper from your extension toolbar
-2. Choose a font and adjust the size and spacing sliders. Use the **"This Site / All Sites"** switch to scope your changes, then click **Save** to keep them
+2. Choose a font, adjust the size and spacing sliders, and turn on the reading ruler if you'd like. Use the **"This Site / All Sites"** switch to scope your changes, then click **Save** to keep them
 3. To convert image to text via OCR:
    - Click "Upload Screenshot"
    - Select an image containing text
@@ -66,6 +67,10 @@ Edit source files in `src/`, and static assets in `static/`. The build outputs t
 - Letter spacing: 0–0.3em
 - Word spacing: 0–0.5em
 - Settings apply globally by default, or per-site (by domain) when scoped to "This Site"
+
+### Reading ruler
+- Follows your mouse, and grows with the font size setting
+- Clicks and text selection work through it
 
 ### OCR
 - Max file size: 5MB
