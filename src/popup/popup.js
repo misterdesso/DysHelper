@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const letterSpacingValue = document.getElementById("letter-spacing-value");
   const wordSpacingSlider = document.getElementById("word-spacing-slider");
   const wordSpacingValue = document.getElementById("word-spacing-value");
+  const rulerToggle = document.getElementById("ruler-toggle");
   const resetButton = document.getElementById("reset-button");
   const saveButton = document.getElementById("save-button");
   const scopeSiteLabel = document.getElementById("scope-site-label");
@@ -157,6 +158,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     previewAndRefresh();
   });
 
+  rulerToggle.addEventListener("change", () => {
+    working().rulerEnabled = rulerToggle.checked;
+    previewAndRefresh();
+  });
+
   // Reset is staged: it previews the reset and enables Save, but only commits
   // when the user saves.
   resetButton.addEventListener("click", () => {
@@ -222,6 +228,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     letterSpacingValue.textContent = `${s.letterSpacing.toFixed(2)}em`;
     wordSpacingSlider.value = s.wordSpacing;
     wordSpacingValue.textContent = `${s.wordSpacing.toFixed(2)}em`;
+    rulerToggle.checked = s.rulerEnabled;
   }
 
   function showStatus(text, type) {
