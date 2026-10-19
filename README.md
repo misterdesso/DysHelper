@@ -1,6 +1,10 @@
 <div align="center">
   <img src="static/icons/logo_500.png" alt="DysHelper Logo" width="150"/>
   <h1>DysHelper</h1>
+
+  <a href="https://github.com/misterdesso/DysHelper/releases/latest"><img src="https://img.shields.io/github/v/release/misterdesso/DysHelper" alt="Latest release"></a>
+  <a href="https://github.com/misterdesso/DysHelper/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/misterdesso/DysHelper/ci.yml?branch=main&label=CI" alt="CI status"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/misterdesso/DysHelper" alt="MIT license"></a>
 </div>
 
 **DysHelper** is a lightweight Chromium extension that brings accessibility to the web for dyslexic users. Through various techniques (see features), it transforms online content to make reading smoother and less overwhelming. The goal goes beyond dyslexia; DysHelper is about creating a more inclusive internet where digital content is clearer, friendlier, and easier to navigate for everyone.
