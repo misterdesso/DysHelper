@@ -20,6 +20,6 @@ export default [
     },
   },
   {
-    ignores: ["dist/", "node_modules/", "tesseract_ocr/"],
+    ignores: ["dist/", "node_modules/"],
   },
 ];
